@@ -6,24 +6,16 @@ const Posts = require('../Schemas/post');
 
 // 게시글 생성 : POST -> localhost:3000/posts
 router.post('/', async (req, res) => {
-
     try {
-
         const { postId, user, password, title, content } = req.body;
-
         const post = await Posts.find({ postId });
         if (post.length) {
             return res.status(404).send({ message: "이미 있는 데이터입니다." });
         };
-
         await Posts.create({ postId, user, password, title, content });
-
         return res.status(200).json({ message: '게시글을 생성하였습니다.' })
-
     } catch {
-        
         return res.status(400).json({ message: '데이터 형식이 올바르지 않습니다.' });
-        
     }
 });
 
@@ -44,7 +36,7 @@ router.get('/', async (req, res) => {
 router.get('/:postId', async (req, res) => {
     try {
         const { postId } = req.params;
-        const post = await Posts.findOne({ postId }, { "_id":0, "password":0, "__v":0});
+        const post = await Posts.findOne({ postId }, { "_id": 0, "password": 0, "__v": 0 });
         if (!post) {
             return res.status(404).json({ message: '게시글 조회에 실패하였습니다.' });
         }
