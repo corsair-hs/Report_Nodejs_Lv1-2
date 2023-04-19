@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const Posts = require('../Schemas/post.js');
+const Posts = require('../schemas/post.js');
 
 
 // 게시글 생성 : POST -> localhost:3000/posts
