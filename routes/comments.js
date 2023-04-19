@@ -72,8 +72,8 @@ router.delete('/:postId/comments/:commentId', async (req, res) => {
     try {
         const postId = req.params.postId;
         const commentId = req.params.commentId;
-        const [post] = await Posts.find({ postId });
-        const [comment] = await Comments.find({ commentId });
+        const [ post ] = await Posts.find({ postId });
+        const [ comment ] = await Comments.find({ commentId });
         const { password } = req.body;
         if (!post) {
             return res.status(404).json({ message: '게시글 조회에 실패하였습니다.' });
