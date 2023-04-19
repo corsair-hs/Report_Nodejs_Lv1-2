@@ -7,7 +7,7 @@ app.use(express.json());
 
 // '/' Test
 app.get('/', (req, res) => {
-    res.send('res.send Test!!!');
+    res.send('/ Test!!!');
 });
 
 const postsRouter = require('./routes/posts');

@@ -1,10 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-// const Posts = require('../Schemas/post');
-const Posts = require('../schemas/post.js');
-// const Comments = require('../Schemas/comment');
-const Posts = require('../schemas/comment.js');
+const Posts = require('../Schemas/post');
+const Comments = require('../Schemas/comment');
 
 
 // 댓글 생성 : POST -> localhost:3000/posts/:postId/comments
@@ -93,6 +91,6 @@ router.delete('/:postId/comments/:commentId', async (req, res) => {
         console.log(err);
         return res.status(400).send({ message: '데이터 형식이 올바르지 않습니다.' })
     }
-})
+});
 
 module.exports = router;
