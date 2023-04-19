@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const Posts = require('../Schemas/post');
-const Comments = require('../Schemas/comment');
+// const Posts = require('../Schemas/post');
+const Posts = require('../schemas/post.js');
+// const Comments = require('../Schemas/comment');
+const Posts = require('../schemas/comment.js');
 
 
 // 댓글 생성 : POST -> localhost:3000/posts/:postId/comments
