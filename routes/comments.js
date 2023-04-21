@@ -47,8 +47,8 @@ router.get('/:_postId/comments', async(req, res) => {
 router.put('/:_postId/comments/:_commentId', async(req, res) => {
     try {
         const { _postId, _commentId } = req.params;
-        const [post] = await Posts.find({ _postId });
-        const [comment] = await Comments.find({ commentId });
+        const [post] = await Posts.find({ _id:_postId });
+        const [comment] = await Comments.find({ _id:_commentId });
         const { password, content } = req.body;
         if (!post) {
             return res.status(404).json({ message: '게시글 조회에 실패하였습니다.' });
@@ -57,7 +57,7 @@ router.put('/:_postId/comments/:_commentId', async(req, res) => {
             return res.status(404).json({ message: '댓글 조회에 실패하였습니다.' });
         }
         if (password === comment.password) {
-            await Comments.updateOne({ commentId: commentId }, { $set: { content: content } })
+            await Comments.updateOne({ _id: _commentId }, { $set: { content: content } })
             return res.status(200).json({ message: '댓글을 수정하였습니다.' });
         } else {
             return res.status(404).json({ message: '비밀번호가 다릅니다.' });
@@ -70,12 +70,11 @@ router.put('/:_postId/comments/:_commentId', async(req, res) => {
 
 
 // 댓글 삭제 : DELETE -> localhost:3000/posts/:postId/comments/:commentId
-router.delete('/:postId/comments/:commentId', async (req, res) => {
+router.delete('/:_postId/comments/:_commentId', async (req, res) => {
     try {
-        const postId = req.params.postId;
-        const commentId = req.params.commentId;
-        const [ post ] = await Posts.find({ postId });
-        const [ comment ] = await Comments.find({ commentId });
+        const { _postId, _commentId } = req.params;
+        const [ post ] = await Posts.find({ _id:_postId });
+        const [ comment ] = await Comments.find({ _id:_commentId });
         const { password } = req.body;
         if (!post) {
             return res.status(404).json({ message: '게시글 조회에 실패하였습니다.' });
@@ -84,7 +83,7 @@ router.delete('/:postId/comments/:commentId', async (req, res) => {
             return res.status(404).json({ message: '댓글 조회에 실패하였습니다.' });
         }
         if (password === comment.password) {
-            await Comments.deleteOne({ commentId: commentId })
+            await Comments.deleteOne({ _id: _commentId })
             return res.status(200).json({ message: '댓글을 삭제하였습니다.' });
         } else {
             return res.status(404).json({ message: '비밀번호가 다릅니다.' });
