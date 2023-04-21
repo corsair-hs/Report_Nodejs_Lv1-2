@@ -6,10 +6,10 @@ const Comments = require('../schemas/comment.js');
 
 
 // 댓글 생성 : POST -> localhost:3000/posts/:postId/comments
-router.post('/:postId/comments', async (req, res) => {
+router.post('/:_postId/comments', async (req, res) => {
     try {
-        const postId = req.params.postId;
-        const { commentId, user, password, content } = req.body;
+        const _postId = req.params;
+        const { user, password, content } = req.body;
         const comment = await Comments.find({ commentId })
         if (comment.length) {
             return res.status(404).send({ message: "이미 있는 데이터입니다." });
@@ -43,8 +43,9 @@ router.get('/:postId/comments', async(req, res) => {
 // 댓글 수정 : PUT -> localhost:3000/posts/:postId/comments/:commentId
 router.put('/:postId/comments/:commentId', async(req, res) => {
     try {
-        const postId = req.params.postId;
-        const commentId = req.params.commentId;
+        // const postId = req.params.postId;
+        // const commentId = req.params.commentId;
+        const { postId, commentId } = req.params;
         const [post] = await Posts.find({ postId });
         const [comment] = await Comments.find({ commentId });
         const { password, content } = req.body;

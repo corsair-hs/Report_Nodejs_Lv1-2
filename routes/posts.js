@@ -7,40 +7,28 @@ const Posts = require('../schemas/post.js');
 // 게시글 생성 : POST -> localhost:3000/posts
 router.post('/', async (req, res) => {
     try {
-        const { postId, user, password, title, content } = req.body;
-        const post = await Posts.find({ postId });
-        if (post.length) {
-            return res.status(404).send({ message: "이미 있는 데이터입니다." });
-        };
-        await Posts.create({ postId, user, password, title, content });
+        const { user, password, title, content } = req.body;
+        await Posts.create({ user, password, title, content });
         return res.status(200).json({ message: '게시글을 생성하였습니다.' })
     } catch {
         return res.status(400).json({ message: '데이터 형식이 올바르지 않습니다.' });
     }
+
 });
 
 
 // 게시글 조회 : GET -> localhost:3000/posts
 router.get('/', async (req, res) => {
-    try {
-        const post = await Posts.find({}, { _id: 0, __v: 0, password:0 });
-        res.json({ data: post });
-    } catch (err) {
-        console.log(err);
-        res.status(400).send({ message: '데이터 형식이 올바르지 않습니다.' });
-    }
+    const post = await Posts.find({}, { "__v": 0, "password": 0, "content": 0 });
+    res.json({ data: post });
 });
 
 
 // 게시글 상세조회 : GET -> localhost:3000/posts/:postId
-router.get('/:postId', async (req, res) => {
+router.get('/:_postId', async (req, res) => {
     try {
-        const { postId } = req.params;
-        const post = await Posts.findOne({ postId }, { "_id": 0, "password": 0, "__v": 0 });      
-
-        if (!post) {
-            return res.status(404).json({ message: '게시글 조회에 실패하였습니다.' });
-        }
+        const { _postId } = req.params;
+        const post = await Posts.findOne({ _id: _postId }, { "password": 0, "__v": 0 });
         res.json({ data: post });
     } catch (err) {
         console.error(err);
@@ -50,16 +38,16 @@ router.get('/:postId', async (req, res) => {
 
 
 // 게시글 수정 : PUT -> localhost:3000/posts/:postId
-router.put('/:postId', async (req, res) => {
+router.put('/:_postId', async (req, res) => {
     try {
-        const { postId } = req.params;
+        const { _postId } = req.params;
         const { password, title, content } = req.body;
-        const [post] = await Posts.find({ postId });
+        const [post] = await Posts.find({ _id:_postId });
         if (!post) {
             return res.status(404).json({ message: '게시글 조회에 실패하였습니다.' });
         }
         if (password === post.password) {
-            await Posts.updateOne({ postId }, { $set: { title: title, content: content } })
+            await Posts.updateOne({ _id:_postId }, { $set: { title: title, content: content } })
             return res.status(200).json({ message: '게시글을 수정하였습니다.' });
         } else {
             return res.status(404).json({ message: '비밀번호가 다릅니다.' });
@@ -72,18 +60,18 @@ router.put('/:postId', async (req, res) => {
 
 
 // 게시글 삭제 : DELETE -> localhost:3000/posts/:postId
-router.delete('/:postId', async (req, res) => {
+router.delete('/:_postId', async (req, res) => {
     try {
-        const { postId } = req.params;
+        const { _postId } = req.params;
         const { password } = req.body;
-        const [ post ] = await Posts.find({ postId });
+        const [post] = await Posts.find({ _id:_postId });
 
         if (!post) {
             return res.status(404).json({ message: '게시글 조회에 실패하였습니다.' });
         }
 
         if (password === post.password) {
-            await Posts.deleteOne({ postId });
+            await Posts.deleteOne({ _id:_postId });
             return res.status(200).json({ message: '게시글을 삭제하였습니다.' });
         } else {
             return res.status(404).json({ message: '비밀번호가 다릅니다.' });
