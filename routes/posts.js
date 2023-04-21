@@ -13,7 +13,6 @@ router.post('/', async (req, res) => {
     } catch {
         return res.status(400).json({ message: '데이터 형식이 올바르지 않습니다.' });
     }
-
 });
 
 
@@ -27,7 +26,7 @@ router.get('/', async (req, res) => {
             title : value.title,
             createdAt : value.createdAt
         }
-    })
+    });
     res.json({ data: postPrint });
 });
 
@@ -36,7 +35,7 @@ router.get('/', async (req, res) => {
 router.get('/:_postId', async (req, res) => {
     try {
         const { _postId } = req.params;
-        const post = await Posts.findOne({ _id: _postId }, { "password": 0, "__v": 0 });
+        const post = await Posts.findOne({ _id : _postId }, { "password": 0, "__v": 0 });
         const postPrint = {
                 postId : post._id,
                 user : post.user,
