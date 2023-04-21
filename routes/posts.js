@@ -20,7 +20,15 @@ router.post('/', async (req, res) => {
 // 게시글 조회 : GET -> localhost:3000/posts
 router.get('/', async (req, res) => {
     const post = await Posts.find({}, { "__v": 0, "password": 0, "content": 0 });
-    res.json({ data: post });
+    const postPrint = post.map((value)=>{
+        return {
+            postId : value._id,
+            user : value.user,
+            title : value.title,
+            createdAt : value.createdAt
+        }
+    })
+    res.json({ data: postPrint });
 });
 
 
@@ -29,7 +37,14 @@ router.get('/:_postId', async (req, res) => {
     try {
         const { _postId } = req.params;
         const post = await Posts.findOne({ _id: _postId }, { "password": 0, "__v": 0 });
-        res.json({ data: post });
+        const postPrint = {
+                postId : post._id,
+                user : post.user,
+                title : post.title,
+                content : post.content,
+                createdAt : post.createdAt
+            };
+        res.json({ data: postPrint });
     } catch (err) {
         console.error(err);
         res.status(400).send({ message: '데이터 형식이 올바르지 않습니다.' });
