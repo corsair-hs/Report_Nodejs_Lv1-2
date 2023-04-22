@@ -26,6 +26,8 @@ router.get('/', async (req, res) => {
             title : value.title,
             createdAt : value.createdAt
         }
+    }).sort((a, b) => {
+        return b.createdAt.getTime() - a.createdAt.getTime();
     });
     res.json({ data: postPrint });
 });

@@ -34,6 +34,8 @@ router.get('/:_postId/comments', async(req, res) => {
                 content : value.content,
                 createdAt : value.createdAt
             }
+        }).sort((a, b) => {
+            return b.createdAt.getTime() - a.createdAt.getTime();
         });
         res.json({ "data" : commentsPrint })
     } catch (err) {
