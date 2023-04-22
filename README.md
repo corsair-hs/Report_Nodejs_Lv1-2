@@ -2,7 +2,7 @@
 
 ### 게시글 RESTful API
 1. 게시글 생성
-  - HTTP METHOD : POST
+   - HTTP METHOD : POST
   - URL : localhost:3000/posts
   - REQ : request.body {user, password, title, content}
   - RES : status(200).{ message : 게시글 생성하였습니다. }
