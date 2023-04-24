@@ -48,9 +48,9 @@ router.get('/', async (req, res) => {
 router.get('/:postId', async (req, res) => {
     try {
         const { postId } = req.params;
-        const post = await Posts.findOne({ _id: postId });
+        const post = await Posts.findOne({_id:postId});
         const result = {
-            postId: post._id,
+            postId: post.postId,
             userId: post.userId,
             nickname: post.nickname,
             title: post.title,
@@ -82,7 +82,8 @@ router.put('/:postId', authMiddleware, async (req, res) => {
             return res.status(412).json({ errorMessage: "게시글 내용의 형식이 일치하지 않습니다."})
         }
         if (userId === post.userId) {
-            await Posts.updateOne({ _id: postId }, { $set: { title: title, content: content } })
+            const date = new Date();
+            await Posts.updateOne({ _id: postId }, { $set: { title: title, content: content, updatedAt: date } })
             return res.status(200).json({ message: '게시글을 수정하였습니다.' });
         } else {
             return res.status(403).json({ errorMessage: '게시글 수정의 권한이 존재하지 않습니다.' });
