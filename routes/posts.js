@@ -8,7 +8,6 @@ const Posts = require('../schemas/post.js');
 router.post('/', authMiddleware, async (req, res) => {
     try {
         const { userId, nickname } = res.locals.user;
-        // console.log(userId);
         const { title, content } = req.body;
         await Posts.create({ userId, nickname, title, content });
         return res.status(200).json({ message: '게시글 작성에 성공하였습니다.' })
@@ -21,11 +20,8 @@ router.post('/', authMiddleware, async (req, res) => {
 // 게시글 조회 : GET -> localhost:3000/posts
 router.get('/', async (req, res) => {
     try {
-        const post = await (Posts.find())
-            .sort("-createdAt")
-            // .sort((a, b) => {
-            //         return b.createdAt.getTime() - a.createdAt.getTime();
-            // });
+        const post = await (Posts.find()).sort("-createdAt");   // 내림차순 방법 1
+        // console.log(post);
         const results = post.map((item) => {
             return {
                 postId: item.postId,
@@ -35,7 +31,10 @@ router.get('/', async (req, res) => {
                 createdAt: item.createdAt,
                 updatedAt: item.updatedAt
             };
-        });
+        }).sort((a, b) => {
+            return b.createdAt.getTime() - a.createdAt.getTime();
+        }); // 내림차순 방법 2 ( 둘 중 하나를 해도 먹힘, 배열 유무 차이라지만 둘다 배열 내 객체... 아직 차이 잘 모르겠음 )
+        // console.log(results);
         res.json({ data: results });
     } catch (err) {
         console.error(err);
