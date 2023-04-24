@@ -1,27 +1,38 @@
 const mongoose = require('mongoose');
 
-const commentsSchema = new mongoose.Schema({
-    postId: {
-        type: String,
-        required: true
-    },
-    user: {
-        type: String,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    content: {
-        type: String,
-        required: true
-    },
-    createdAt: {
-        type: Date,
-        required: true,
-        default: Date.now
-    }
+const commentSchema = new mongoose.Schema({
+   postId: {
+      type: String,
+      required: true
+   },
+   userId: {
+      type: String,
+      required: true
+   },
+   nickname: {
+      type: String,
+      required: true
+   },
+   comment: {
+      type: String,
+      required: true
+   },
+   createdAt: {
+      type: Date,
+      required: true,
+      default: Date.now
+   },
+   updatedAt: {
+      type: Date
+   }
 });
 
-module.exports = mongoose.model("comment", commentsSchema);
+commentSchema.virtual("commentId").get(function () {
+   return this._id.toHexString();
+});
+
+commentSchema.set("toJSON", {
+   virtuals: true   // JSON 형태로 가공할 때, postId를 출력시켜준다.
+});
+
+module.exports = mongoose.model("comment", commentSchema);
