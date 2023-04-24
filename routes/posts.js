@@ -21,21 +21,21 @@ router.post('/', authMiddleware, async (req, res) => {
 // 게시글 조회 : GET -> localhost:3000/posts
 router.get('/', async (req, res) => {
     try {
-        const post = await Posts.find({}, { "__v": 0, "content": 0 }).exec();
-
+        const post = await (Posts.find())
+            .sort("-createdAt")
+            // .sort((a, b) => {
+            //         return b.createdAt.getTime() - a.createdAt.getTime();
+            // });
         const results = post.map((item) => {
             return {
-                "postId": item._id,
-                "userId": item.userId,
-                "nickname": item.nickname,
-                "title": item.title,
-                "createdAt": item.createdAt,
-                "updatedAt": item.updatedAt
-            }
-        }).sort((a, b) => {
-            return b.createdAt.getTime() - a.createdAt.getTime();
+                postId: item.postId,
+                userId: item.userId,
+                nickname: item.nickname,
+                title: item.title,
+                createdAt: item.createdAt,
+                updatedAt: item.updatedAt
+            };
         });
-
         res.json({ data: results });
     } catch (err) {
         console.error(err);
