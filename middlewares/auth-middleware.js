@@ -13,8 +13,8 @@ module.exports = async (req, res, next) => {
    // 1. authType이 Bearer 타입인지 확인하는 것! (Bearer랑 다르다면?)
    // 2. authToken을 검증하는 것! (비었다면?)
    if (!authToken || authType !== "Bearer") {
-      res.status(401).send({
-         errorMessage: "로그인 후 이용 가능한 기능입니다.",
+      res.status(403).send({
+         errorMessage: "로그인이 필요한 기능입니다.",
       });
       return;
    }
@@ -30,7 +30,7 @@ module.exports = async (req, res, next) => {
       next();  // 이 미들웨어 다음으로 보낸다.
    } catch (error) {
       console.error(error);
-      res.status(400).json({ errorMessage: "로그인 후에 이용할 수 있는 기능입니다." });
+      res.status(403).json({ errorMessage: "전달된 쿠키에서 오류가 발생하였습니다." });
       return;
    }
 
