@@ -100,7 +100,7 @@ router.delete('/:postId', authMiddleware, async (req, res) => {
     try {
         const { userId } = res.locals.user;
         const { postId } = req.params;
-        console.log('여기까지1')
+        
         const post = await Posts.findOne({ _id: postId });
 
         if (!post) {
