@@ -16,6 +16,7 @@ router.post('/', authMiddleware, async (req, res) => {
     }
 });
 
+// const post = await (Posts.find()).sort("-createdAt"); 사용 시 MongoDB 내부 기능으로 mongoose 외 일반 배열에서는 동작 안 된다고 함
 
 // 게시글 조회 : GET -> localhost:3000/posts
 router.get('/', async (req, res) => {
